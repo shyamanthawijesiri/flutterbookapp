@@ -5,7 +5,7 @@ import './product_control.dart';
 
 class ProductManager extends StatefulWidget {
  final Map<String, String> startingProduct;
-
+ 
   ProductManager({this.startingProduct }){
     print('[ProductManager widget] Constructor');
   }
@@ -44,6 +44,12 @@ class _ProductManagerState extends State<ProductManager> {
       print(_product);
   }
 
+  void _deleteProduct(int index){
+    setState(() {
+      _product.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -54,7 +60,7 @@ class _ProductManagerState extends State<ProductManager> {
           margin: EdgeInsets.all(10.0),
           child: ProductControl(_addProduct),
         ),
-        Expanded(child: Products(_product))
+        Expanded(child: Products(_product, deleteProduct : _deleteProduct))
       ],
     );
   }
