@@ -1,4 +1,4 @@
-import 'package:first_app/pages/products.dart';
+import 'package:first_app/pages/products_admin.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatelessWidget {
@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => ProductsPage(),
+              builder: (BuildContext context) => ProductsAdiminPage(),
             ),
           );
         },
