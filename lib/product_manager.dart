@@ -3,52 +3,45 @@ import 'package:flutter/material.dart';
 import './product.dart';
 import './product_control.dart';
 
-class ProductManager extends StatefulWidget {
- final Map<String, String> startingProduct;
+class ProductManager extends StatelessWidget {
+//  final Map<String, String> startingProduct;
  
-  ProductManager({this.startingProduct }){
-    print('[ProductManager widget] Constructor');
-  }
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    print('[ProductManager widget] createState()');
-    return _ProductManagerState();
-  }
-}
+//   ProductManager({this.startingProduct }){
+//     print('[ProductManager widget] Constructor');
+//   }
+//   @override
+//   State<StatefulWidget> createState() {
+//     // TODO: implement createState
+//     print('[ProductManager widget] createState()');
+//     return _ProductManagerState();
+//   }
+// }
 
-class _ProductManagerState extends State<ProductManager> {
-  List<Map<String, String>> _product = [];
+// class _ProductManagerState extends State<ProductManager> {
+//   List<Map<String, String>> _product = [];
 
-  @override
-  void initState() {
-    print('[ProductManager state] initState()');
-    if(widget.startingProduct != null){
+//   @override
+//   void initState() {
+//     print('[ProductManager state] initState()');
+//     if(widget.startingProduct != null){
 
-    _product.add(widget.startingProduct);
-    }
-    super.initState();
-  }
+//     _product.add(widget.startingProduct);
+//     }
+//     super.initState();
+//   }
 
-  @override
-  void didUpdateWidget(ProductManager oldWidget) {
-    // TODO: implement didUpdateWidget
-    print('[ProductManager widget] didUpdateWidget()');
-    super.didUpdateWidget(oldWidget);
-  }
+//   @override
+//   void didUpdateWidget(ProductManager oldWidget) {
+//     // TODO: implement didUpdateWidget
+//     print('[ProductManager widget] didUpdateWidget()');
+//     super.didUpdateWidget(oldWidget);
+//   }
+final List<Map<String,String>> product;
+final Function addProduct;
+final Function deleteProduct;
 
-  void _addProduct(Map<String, String> product){
-     setState(() {
-                _product.add(product);
-      });
-      print(_product);
-  }
+ProductManager(this.product, this.addProduct, this.deleteProduct);
 
-  void _deleteProduct(int index){
-    setState(() {
-      _product.removeAt(index);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +51,9 @@ class _ProductManagerState extends State<ProductManager> {
       children: [
         Container(
           margin: EdgeInsets.all(10.0),
-          child: ProductControl(_addProduct),
+          child: ProductControl(addProduct),
         ),
-        Expanded(child: Products(_product, deleteProduct : _deleteProduct))
+        Expanded(child: Products(product, deleteProduct : deleteProduct))
       ],
     );
   }

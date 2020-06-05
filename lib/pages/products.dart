@@ -1,8 +1,15 @@
+
 import 'package:flutter/material.dart';
 import '../product_manager.dart';
 import './products_admin.dart';
 
 class ProductsPage extends StatelessWidget {
+
+final List<Map<String,String>> product;
+final Function addProduct;
+final Function deleteProduct;
+
+ProductsPage(this.product, this.addProduct, this.deleteProduct);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -25,7 +32,7 @@ class ProductsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Hello'),
       ),
-      body: ProductManager(),
+      body: ProductManager(product,addProduct,deleteProduct),
     );
   }
 }

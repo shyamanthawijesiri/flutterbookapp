@@ -22,12 +22,7 @@ class ProductsAdiminPage extends StatelessWidget {
               ListTile(
                 title: Text('All product'),
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ProductsPage(),
-                    ),
-                  );
+                  Navigator.pushReplacementNamed(context, '/');
                 },
               )
             ],
