@@ -24,7 +24,7 @@ ProductsPage(this.product, this.addProduct, this.deleteProduct);
           ListTile(
             title: Text('Manage Product'),
             onTap: () {
-                Navigator.pushReplacementNamed(context, '/admin');
+                Navigator.pushReplacementNamed(context, '/admins');
             },
           )
         ],
