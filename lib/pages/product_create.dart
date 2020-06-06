@@ -17,18 +17,41 @@ class ProductCreatePage extends StatefulWidget{
   }
 }
 class _ProductCreatePageState extends State<ProductCreatePage>{
-String titleValue = '';
+String titleValue;
+String productDescription;
+double price;
 
 @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Column(children:<Widget>[
-      TextField(onChanged: (String value){
+    return Container(
+      margin: EdgeInsets.all(20.0),
+      child: ListView(children:<Widget>[
+      TextField(
+        decoration: InputDecoration(labelText: 'Product title'),
+        onChanged: (String value){
         setState(() {
           titleValue = value;
         });
       },),
-      Text(titleValue),
-    ]);
+       TextField(
+         decoration: InputDecoration(labelText: 'Product description'),
+         maxLines: 5,
+         onChanged: (String value){
+        setState(() {
+          productDescription = value;
+        });
+      },),
+       TextField(
+         decoration: InputDecoration(labelText: 'Product price'),
+         keyboardType: TextInputType.number,
+         onChanged: (String value){
+        setState(() {
+          price = double.parse(value);
+        });
+      },),
+      
+      
+    ]),);
   }
 }
