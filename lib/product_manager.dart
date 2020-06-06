@@ -36,11 +36,12 @@ class ProductManager extends StatelessWidget {
 //     print('[ProductManager widget] didUpdateWidget()');
 //     super.didUpdateWidget(oldWidget);
 //   }
-final List<Map<String,String>> product;
-final Function addProduct;
-final Function deleteProduct;
+final List<Map<String,dynamic>> product;
+// final Function addProduct;
+// final Function deleteProduct;
 
-ProductManager(this.product, this.addProduct, this.deleteProduct);
+ProductManager(this.product);
+//ProductManager(this.product, this.addProduct, this.deleteProduct);
 
 
   @override
@@ -49,11 +50,12 @@ ProductManager(this.product, this.addProduct, this.deleteProduct);
     print('[ProductManager state] build()');
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.all(10.0),
-          child: ProductControl(addProduct),
-        ),
-        Expanded(child: Products(product, deleteProduct : deleteProduct))
+        // Container(
+        //   margin: EdgeInsets.all(10.0),
+        //   child: ProductControl(addProduct),
+        // ),
+        Expanded(child: Products(product))
+       // Expanded(child: Products(product, deleteProduct : deleteProduct))
       ],
     );
   }

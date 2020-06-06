@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class ProductControl extends StatelessWidget{
-  final Function addProduct;
-  ProductControl(this.addProduct);
-  @override
-  Widget build(BuildContext context) {
+// class ProductControl extends StatelessWidget{
+//   final Function addProduct;
+//   ProductControl(this.addProduct);
+//   @override
+//   Widget build(BuildContext context) {
     
-    return RaisedButton(
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-             addProduct({'title':'chocolate', 'image':'assets/leaves.jpg'});
-            },
-            child: Text('add Product'),
-          );
-  }
-}
+//     return RaisedButton(
+//             color: Theme.of(context).primaryColor,
+//             onPressed: () {
+//              addProduct({'title':'chocolate', 'image':'assets/leaves.jpg'});
+//             },
+//             child: Text('add Product'),
+//           );
+//   }
+// }
