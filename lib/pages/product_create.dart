@@ -51,8 +51,13 @@ double price;
           price = double.parse(value);
         });
       },),
+      SizedBox(
+        height: 10.0,
+      ),
       RaisedButton(
         child: Text('Save'),
+        color: Theme.of(context).accentColor,
+        textColor: Colors.white,
         onPressed: (){
         final Map<String, dynamic> product = {
             'title': titleValue,
@@ -61,6 +66,7 @@ double price;
             'image': 'assets/leaves.jpg'
         };
         widget.addProduct(product);
+        Navigator.pushReplacementNamed(context, '/');
       })
       
       
