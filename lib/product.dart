@@ -15,7 +15,27 @@ class Products extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset(product[index]['image']),
-          Text(product[index]['title']),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(product[index]['title'],
+                  style: TextStyle(fontSize: 30),
+              ),
+              SizedBox(width: 20.0),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).accentColor,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                 child:Text(//'\$'+product[index]['price'].toString()
+                          '\$${product[index]['price'].toString()}'              
+                    ),
+                
+              )
+            ]
+          ),
+          
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
