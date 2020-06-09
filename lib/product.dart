@@ -35,7 +35,14 @@ class Products extends StatelessWidget {
               )
             ]
           ),
-          
+          Container(
+            padding: EdgeInsets.all(3.0),
+            decoration: BoxDecoration(
+              border: Border.all(color:Colors.grey, width: 1.0),
+              borderRadius: BorderRadius.circular(4.0)
+            ),
+              child: Text('Horathepola, welpalla'),
+          ),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
