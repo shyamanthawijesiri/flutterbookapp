@@ -32,7 +32,10 @@ ProductsPage(this.product);
         ],
       )),
       appBar: AppBar(
-        title: Text('Hello'),
+        title: Text('EasyList'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.favorite), onPressed: (){})
+        ],
       ),
      // body: ProductManager(product,addProduct,deleteProduct),
       body: ProductManager(product),
