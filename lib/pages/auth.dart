@@ -27,19 +27,22 @@ class _AuthPageState extends State<AuthPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-            image: AssetImage('assets/leaves.jpg')
-          ),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.dstATop),
+              image: AssetImage('assets/leaves.jpg')),
         ),
-
-          padding: EdgeInsets.all(10.0),
-          child: ListView(
+        padding: EdgeInsets.all(10.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
             children: <Widget>[
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Email',
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 onChanged: (String value) {
                   setState(() {
@@ -47,10 +50,13 @@ class _AuthPageState extends State<AuthPage> {
                   });
                 },
               ),
+              SizedBox(height: 10.0),
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 onChanged: (String value) {
                   setState(() {
@@ -59,17 +65,19 @@ class _AuthPageState extends State<AuthPage> {
                 },
               ),
               SwitchListTile(
-                value: _acceptTerms, 
-                onChanged: (bool value) {
-                  setState(() {
-                    _acceptTerms = value;
-                  });
-                },
-                title: Text('Acept terms')),
+                  value: _acceptTerms,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _acceptTerms = value;
+                    });
+                  },
+                  title: Text('Acept terms')),
               SizedBox(height: 10.0),
               RaisedButton(child: Text('Login'), onPressed: () {})
             ],
-          )),
+          ),),
+        ),
+      ),
     );
   }
 }
