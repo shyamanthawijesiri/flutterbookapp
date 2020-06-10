@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../product_manager.dart';
 import './products_admin.dart';
+import '../widgets/products/product.dart';
 
 class ProductsPage extends StatelessWidget {
 
@@ -38,7 +39,7 @@ ProductsPage(this.product);
         ],
       ),
      // body: ProductManager(product,addProduct,deleteProduct),
-      body: ProductManager(product),
+      body: Products(product),
     );
   }
 }
