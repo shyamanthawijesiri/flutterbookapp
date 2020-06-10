@@ -73,9 +73,16 @@ void _submitForm(){
 @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550.0 ? 500: deviceWidth*0.95;
+    final  double targetPadding = deviceWidth - targetWidth;
+    
     return Container(
+      width: targetWidth,
       margin: EdgeInsets.all(20.0),
-      child: ListView(children:<Widget>[
+      child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: targetPadding/2),
+        children:<Widget>[
      _buildTitleTextField(),
        _buildDescriptionTextField(),
        _buildPriceTextField(),
