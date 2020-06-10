@@ -17,27 +17,17 @@ class _AuthPageState extends State<AuthPage> {
   String _email;
   String _password;
   bool _acceptTerms = false;
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sample Code'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
+
+DecorationImage _buildBackgroundImage(){
+  return  DecorationImage(
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              image: AssetImage('assets/leaves.jpg')),
-        ),
-        padding: EdgeInsets.all(10.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-            children: <Widget>[
-              TextField(
+              image: AssetImage('assets/leaves.jpg'),);
+}
+
+Widget _buildEmailTextField(){
+  return  TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -49,9 +39,11 @@ class _AuthPageState extends State<AuthPage> {
                     _email = value;
                   });
                 },
-              ),
-              SizedBox(height: 10.0),
-              TextField(
+              );
+}
+
+Widget _buildPasswordTextField(){
+  return   TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -63,17 +55,48 @@ class _AuthPageState extends State<AuthPage> {
                     _password = value;
                   });
                 },
-              ),
-              SwitchListTile(
+              );
+}
+
+Widget _buildAcceptSwitch(){
+  return SwitchListTile(
                   value: _acceptTerms,
                   onChanged: (bool value) {
                     setState(() {
                       _acceptTerms = value;
                     });
                   },
-                  title: Text('Acept terms')),
+                  title: Text('Acept terms'));
+}
+
+void _submitForm(){
+  Navigator.pushReplacementNamed(context, '/products');
+}
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sample Code'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: _buildBackgroundImage()
+          ),
+        
+        padding: EdgeInsets.all(10.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+            children: <Widget>[
+              _buildEmailTextField(),
+             
               SizedBox(height: 10.0),
-              RaisedButton(child: Text('Login'), onPressed: () {})
+              _buildPasswordTextField(),
+              _buildAcceptSwitch(),
+              SizedBox(height: 10.0),
+              RaisedButton(child: Text('Login'), onPressed: _submitForm)
             ],
           ),),
         ),

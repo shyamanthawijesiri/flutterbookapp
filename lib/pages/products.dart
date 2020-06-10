@@ -12,11 +12,8 @@ final List<Map<String,dynamic>> product;
 
 ProductsPage(this.product);
 //ProductsPage(this.product, this.addProduct, this.deleteProduct);
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      drawer: Drawer(
+Widget _buildSlideDrawer(BuildContext context){
+  return Drawer(
           child: Column(
         children: <Widget>[
           AppBar(
@@ -31,7 +28,13 @@ ProductsPage(this.product);
             },
           )
         ],
-      )),
+      ));
+}
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      drawer: _buildSlideDrawer(context),
       appBar: AppBar(
         title: Text('EasyList'),
         actions: <Widget>[

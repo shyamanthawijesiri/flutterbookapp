@@ -11,12 +11,8 @@ class ProductsAdiminPage extends StatelessWidget {
 
   ProductsAdiminPage(this.addProduct,this.deleteProduct);
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        drawer: Drawer(
+Widget _buildSlideDrawer(BuildContext context){
+  return Drawer(
           child: Column(
             children: <Widget>[
               AppBar(
@@ -32,7 +28,15 @@ class ProductsAdiminPage extends StatelessWidget {
               )
             ],
           ),
-        ),
+        );
+}
+
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        drawer: _buildSlideDrawer(context),
         appBar: AppBar(
           title: Text('Manage Productt'),
           bottom: TabBar(tabs: <Widget>[
