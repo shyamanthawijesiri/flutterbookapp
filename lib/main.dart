@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
         '/': (BuildContext context) =>
            // ProductsPage(_product ),
             AuthPage(),
+        '/products': (BuildContext context) => ProductsPage(_product),
             
             // ProductsPage(_product,_addProduct, _deleteProduct),
         '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _deleteProduct),
