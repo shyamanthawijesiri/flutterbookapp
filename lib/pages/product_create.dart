@@ -22,6 +22,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String titleValue;
   String productDescription;
   double price;
+
+  final Map<String, dynamic> _formData ={
+      'title': null,
+      'description': null,
+      'price': null,
+      'image': 'assets/leaves.jpg'
+  };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildTitleTextField() {
@@ -33,9 +40,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       },
       decoration: InputDecoration(labelText: 'Product title'),
       onSaved: (String value) {
-        setState(() {
-          titleValue = value;
-        });
+       
+          _formData['title'] = value;
+  
       },
     );
   }
@@ -45,9 +52,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       decoration: InputDecoration(labelText: 'Product description'),
       maxLines: 5,
       onSaved: (String value) {
-        setState(() {
-          productDescription = value;
-        });
+       
+          _formData['description'] = value;
+     
       },
     );
   }
@@ -57,9 +64,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       decoration: InputDecoration(labelText: 'Product price'),
       keyboardType: TextInputType.number,
       onSaved: (String value) {
-        setState(() {
-          price = double.parse(value);
-        });
+       
+          _formData['price'] = double.parse(value);
+      
       },
     );
   }
@@ -67,13 +74,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   void _submitForm() {
     _formKey.currentState.validate();
     _formKey.currentState.save();
-    final Map<String, dynamic> product = {
-      'title': titleValue,
-      'description': productDescription,
-      'price': price,
-      'image': 'assets/leaves.jpg'
-    };
-    widget.addProduct(product);
+    
+    widget.addProduct(_formData);
     Navigator.pushReplacementNamed(context, '/products');
   }
 
