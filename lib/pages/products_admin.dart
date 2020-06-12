@@ -2,14 +2,15 @@ import 'package:first_app/pages/product.dart';
 import 'package:first_app/pages/product_list.dart';
 import 'package:flutter/material.dart';
 
-import 'product_create.dart';
+import 'product_edit.dart';
 import 'products.dart';
 
 class ProductsAdiminPage extends StatelessWidget {
   final Function addProduct;
   final Function deleteProduct;
+  final List<Map<String, dynamic>> products;
 
-  ProductsAdiminPage(this.addProduct,this.deleteProduct);
+  ProductsAdiminPage(this.addProduct,this.deleteProduct, this.products);
   @override
 Widget _buildSlideDrawer(BuildContext context){
   return Drawer(
@@ -45,8 +46,8 @@ Widget _buildSlideDrawer(BuildContext context){
           ]),
         ),
         body: TabBarView(children: <Widget>[
-          ProductCreatePage(addProduct),
-          ProductListPage(),
+          ProductEditPage(addProduct:addProduct),
+          ProductListPage(products),
         ]),
       ),
     );
