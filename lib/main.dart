@@ -35,6 +35,11 @@ class _MyAppState extends State<MyApp> {
       _product.removeAt(index);
     });
   }
+  void _updateProduct(int index, Map<String, dynamic>product){
+    setState(() {
+      _product[index] = product;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         '/products': (BuildContext context) => ProductsPage(_product),
             
             // ProductsPage(_product,_addProduct, _deleteProduct),
-        '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _deleteProduct,_product),
+        '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _updateProduct, _deleteProduct,_product),
       },
 
       onGenerateRoute: (RouteSettings settings) {

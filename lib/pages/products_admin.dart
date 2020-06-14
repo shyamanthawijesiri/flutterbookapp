@@ -8,9 +8,10 @@ import 'products.dart';
 class ProductsAdiminPage extends StatelessWidget {
   final Function addProduct;
   final Function deleteProduct;
+  final Function updateProduct;
   final List<Map<String, dynamic>> products;
 
-  ProductsAdiminPage(this.addProduct,this.deleteProduct, this.products);
+  ProductsAdiminPage(this.addProduct,this.updateProduct, this.deleteProduct, this.products);
   @override
 Widget _buildSlideDrawer(BuildContext context){
   return Drawer(
@@ -47,7 +48,7 @@ Widget _buildSlideDrawer(BuildContext context){
         ),
         body: TabBarView(children: <Widget>[
           ProductEditPage(addProduct:addProduct),
-          ProductListPage(products),
+          ProductListPage(products, updateProduct),
         ]),
       ),
     );
