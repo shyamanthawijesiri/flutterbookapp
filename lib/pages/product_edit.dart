@@ -74,6 +74,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   void _submitForm() {
     _formKey.currentState.validate();
     _formKey.currentState.save();
+    print(_formData);
     if(widget.product == null){
         widget.addProduct(_formData);
     }else{
