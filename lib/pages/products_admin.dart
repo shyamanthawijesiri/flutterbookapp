@@ -48,7 +48,7 @@ Widget _buildSlideDrawer(BuildContext context){
         ),
         body: TabBarView(children: <Widget>[
           ProductEditPage(addProduct:addProduct),
-          ProductListPage(products, updateProduct),
+          ProductListPage(products, updateProduct, deleteProduct),
         ]),
       ),
     );
