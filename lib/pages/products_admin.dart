@@ -1,3 +1,4 @@
+import 'package:first_app/models/product.dart';
 import 'package:first_app/pages/product.dart';
 import 'package:first_app/pages/product_list.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class ProductsAdiminPage extends StatelessWidget {
   final Function addProduct;
   final Function deleteProduct;
   final Function updateProduct;
-  final List<Map<String, dynamic>> products;
+  final List<Product> products;
 
   ProductsAdiminPage(this.addProduct,this.updateProduct, this.deleteProduct, this.products);
   @override

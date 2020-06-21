@@ -6,14 +6,16 @@
 //       });
 //     },),);
 
+import 'package:first_app/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductEditPage extends StatefulWidget {
   final Function addProduct;
   final Function updateProduct;
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
-  ProductEditPage({this.addProduct, this.updateProduct, this.product, this.productIndex});
+  ProductEditPage(
+      {this.addProduct, this.updateProduct, this.product, this.productIndex});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -42,7 +44,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
         }
       },
       decoration: InputDecoration(labelText: 'Product title'),
-       initialValue:widget.product == null ? '' : widget.product['title'].toString(),
+      initialValue:
+          widget.product == null ? '' : widget.product.title.toString(),
       onSaved: (String value) {
         _formData['title'] = value;
       },
@@ -53,7 +56,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Product description'),
       maxLines: 5,
-       initialValue:widget.product == null ? '' : widget.product['description'].toString(),
+      initialValue:
+          widget.product == null ? '' : widget.product.description.toString(),
       onSaved: (String value) {
         _formData['description'] = value;
       },
@@ -64,7 +68,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Product price'),
       keyboardType: TextInputType.number,
-      initialValue:widget.product == null ? '' : widget.product['price'].toString(),
+      initialValue:
+          widget.product == null ? '' : widget.product.price.toString(),
       onSaved: (String value) {
         _formData['price'] = double.parse(value);
       },
@@ -75,10 +80,20 @@ class _ProductEditPageState extends State<ProductEditPage> {
     _formKey.currentState.validate();
     _formKey.currentState.save();
     print(_formData);
-    if(widget.product == null){
-        widget.addProduct(_formData);
-    }else{
-      widget.updateProduct(widget.productIndex, _formData);
+    if (widget.product == null) {
+      widget.addProduct(
+        Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image']));
+    } else {
+      widget.updateProduct(widget.productIndex,
+       Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image']));
     }
 
     //widget.addProduct(_formData);

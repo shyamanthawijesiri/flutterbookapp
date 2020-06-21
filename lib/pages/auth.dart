@@ -59,16 +59,16 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _buildAcceptSwitch() {
-    return SwitchListTile(
-        value: _acceptTerms,
-        onChanged: (bool value) {
-          setState(() {
-            _acceptTerms = value;
-          });
-        },
-        title: Text('Acept terms'));
-  }
+  // Widget _buildAcceptSwitch() {
+  //   return SwitchListTile(
+  //       value: _acceptTerms,
+  //       onChanged: (bool value) {
+  //         setState(() {
+  //           _acceptTerms = value;
+  //         });
+  //       },
+  //       title: Text('Acept terms'));
+  // }
 
   void _submitForm() {
     Navigator.pushReplacementNamed(context, '/products');
@@ -97,7 +97,7 @@ class _AuthPageState extends State<AuthPage> {
                   _buildEmailTextField(),
                   SizedBox(height: 10.0),
                   _buildPasswordTextField(),
-                  _buildAcceptSwitch(),
+                 // _buildAcceptSwitch(),
                   SizedBox(height: 10.0),
                   RaisedButton(child: Text('Login'), onPressed: _submitForm)
                 ],
