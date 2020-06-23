@@ -7,7 +7,9 @@
 //     },),);
 
 import 'package:first_app/models/product.dart';
+import 'package:first_app/scope-model/products.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ProductEditPage extends StatefulWidget {
   final Function addProduct;
@@ -76,28 +78,40 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm(Function addProduct, Function updateProduct) {
     _formKey.currentState.validate();
     _formKey.currentState.save();
     print(_formData);
     if (widget.product == null) {
-      widget.addProduct(
-        Product(
+      addProduct(Product(
           title: _formData['title'],
           description: _formData['description'],
           price: _formData['price'],
           image: _formData['image']));
     } else {
-      widget.updateProduct(widget.productIndex,
-       Product(
-          title: _formData['title'],
-          description: _formData['description'],
-          price: _formData['price'],
-          image: _formData['image']));
+      updateProduct(
+          widget.productIndex,
+          Product(
+              title: _formData['title'],
+              description: _formData['description'],
+              price: _formData['price'],
+              image: _formData['image']));
     }
 
     //widget.addProduct(_formData);
     Navigator.pushReplacementNamed(context, '/products');
+  }
+
+  Widget _buildSubmitButton() {
+    return ScopedModelDescendant(builder: (BuildContext context, Widget child, ProductsModel model){
+      return RaisedButton(
+        child: Text('Save'),
+        color: Theme.of(context).accentColor,
+        textColor: Colors.white,
+        onPressed:() =>  _submitForm(model.addProduct, model.updateProduct));
+    });
+
+    
   }
 
   @override
@@ -125,11 +139,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
                 SizedBox(
                   height: 10.0,
                 ),
-                RaisedButton(
-                    child: Text('Save'),
-                    color: Theme.of(context).accentColor,
-                    textColor: Colors.white,
-                    onPressed: _submitForm)
+                _buildSubmitButton()
               ]),
         ),
       ),

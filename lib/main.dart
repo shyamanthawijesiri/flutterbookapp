@@ -1,5 +1,7 @@
+import 'package:first_app/scope-model/products.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import './models/product.dart';
 import './pages/auth.dart';
@@ -21,29 +23,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Product> _product = [];
-
-  void _addProduct(Product product) {
-    setState(() {
-      _product.add(product);
-    });
-    print(_product);
-  }
-
-  void _deleteProduct(int index) {
-    setState(() {
-      _product.removeAt(index);
-    });
-  }
-  void _updateProduct(int index, Product product){
-    setState(() {
-      _product[index] = product;
-    });
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScopedModel<ProductsModel>(
+      model: ProductsModel(),
+      child:MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: Colors.deepOrange,
@@ -53,10 +39,12 @@ class _MyAppState extends State<MyApp> {
         '/': (BuildContext context) =>
            // ProductsPage(_product ),
             AuthPage(),
-        '/products': (BuildContext context) => ProductsPage(_product),
+       // '/products': (BuildContext context) => ProductsPage(_product),
+        '/products': (BuildContext context) => ProductsPage(),
             
             // ProductsPage(_product,_addProduct, _deleteProduct),
-        '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _updateProduct, _deleteProduct,_product),
+       // '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _updateProduct, _deleteProduct,_product),
+        '/admin': (BuildContext context) => ProductsAdiminPage(),
       },
 
       onGenerateRoute: (RouteSettings settings) {
@@ -68,7 +56,7 @@ class _MyAppState extends State<MyApp> {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
             builder: (BuildContext context) =>
-                ProductPage(_product[index].title, _product[index].image),
+                ProductPage(null,null),
           );
         }
         return null;
@@ -77,10 +65,10 @@ class _MyAppState extends State<MyApp> {
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           builder: (BuildContext context) =>
-              ProductsPage(_product),
+              ProductsPage(),
             //  ProductsPage(_product, _addProduct, _deleteProduct),
         );
       },
-    );
+    ));
   }
 }

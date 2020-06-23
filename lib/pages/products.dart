@@ -7,11 +7,11 @@ import '../widgets/products/product.dart';
 
 class ProductsPage extends StatelessWidget {
 
-final List<Product> product;
-// final Function addProduct;
-// final Function deleteProduct;
+// final List<Product> product;
+// // final Function addProduct;
+// // final Function deleteProduct;
 
-ProductsPage(this.product);
+// ProductsPage(this.product);
 //ProductsPage(this.product, this.addProduct, this.deleteProduct);
 Widget _buildSlideDrawer(BuildContext context){
   return Drawer(
@@ -43,7 +43,7 @@ Widget _buildSlideDrawer(BuildContext context){
         ],
       ),
      // body: ProductManager(product,addProduct,deleteProduct),
-      body: Products(product),
+      body: Products(),
     );
   }
 }
