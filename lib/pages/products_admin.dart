@@ -51,7 +51,7 @@ Widget _buildSlideDrawer(BuildContext context){
           // ProductEditPage(addProduct:addProduct),
           // ProductListPage(products, updateProduct, deleteProduct),
           ProductEditPage(),
-          ProductListPage(null,null,null),
+          ProductListPage(),
         ]),
       ),
     );
