@@ -90,7 +90,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
           image: _formData['image']));
     } else {
       updateProduct(
-          selectiveProductIndex,
+        
           Product(
               title: _formData['title'],
               description: _formData['description'],
