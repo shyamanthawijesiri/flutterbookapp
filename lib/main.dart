@@ -1,4 +1,4 @@
-import 'package:first_app/scope-model/products.dart';
+import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -27,8 +27,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<ProductsModel>(
-      model: ProductsModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child:MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light,

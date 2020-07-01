@@ -7,7 +7,7 @@
 //     },),);
 
 import 'package:first_app/models/product.dart';
-import 'package:first_app/scope-model/products.dart';
+import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -103,7 +103,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   }
 
   Widget _buildSubmitButton() {
-    return ScopedModelDescendant(builder: (BuildContext context, Widget child, ProductsModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       return RaisedButton(
         child: Text('Save'),
         color: Theme.of(context).accentColor,
@@ -148,7 +148,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       final Widget pageContent = _buildPageContent(context, model.selectiveProduct);
       return model.selectiveProductIndex == null
         ? pageContent

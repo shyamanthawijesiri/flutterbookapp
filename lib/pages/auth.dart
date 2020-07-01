@@ -1,6 +1,8 @@
 import 'package:first_app/pages/product.dart';
 import 'package:first_app/pages/products_admin.dart';
+import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../product_manager.dart';
 import './products.dart';
@@ -14,9 +16,13 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  String _email;
-  String _password;
-  bool _acceptTerms = false;
+  Map<String, dynamic> _formData = {
+    'email': null,
+    'password': null,
+    'acceptTerm': false
+  };
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
@@ -28,33 +34,39 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildEmailTextField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        setState(() {
-          _email = value;
-        });
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'email required';
+        }
+      },
+      onSaved: (String value) {
+        _formData['email'] = value;
       },
     );
   }
 
   Widget _buildPasswordTextField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        setState(() {
-          _password = value;
-        });
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'password required';
+        }
+      },
+      onSaved: (String value) {
+        _formData['password'] = value;
       },
     );
   }
@@ -70,17 +82,20 @@ class _AuthPageState extends State<AuthPage> {
   //       title: Text('Acept terms'));
   // }
 
-  void _submitForm() {
+  void _submitForm(Function login) {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    login(_formData['email'],_formData['password']);
     Navigator.pushReplacementNamed(context, '/products');
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double targetWidth = deviceWidth > 550.0 ? 500.0: deviceWidth*0.95;
+    final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sample Code'),
@@ -92,15 +107,20 @@ class _AuthPageState extends State<AuthPage> {
           child: SingleChildScrollView(
             child: Container(
               width: targetWidth,
-              child: Column(
-                children: <Widget>[
-                  _buildEmailTextField(),
-                  SizedBox(height: 10.0),
-                  _buildPasswordTextField(),
-                 // _buildAcceptSwitch(),
-                  SizedBox(height: 10.0),
-                  RaisedButton(child: Text('Login'), onPressed: _submitForm)
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    _buildEmailTextField(),
+                    SizedBox(height: 10.0),
+                    _buildPasswordTextField(),
+                    // _buildAcceptSwitch(),
+                    SizedBox(height: 10.0),
+                    ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
+                      return RaisedButton(child: Text('Login'), onPressed:()=> _submitForm(model.login));
+                    }) 
+                  ],
+                ),
               ),
             ),
           ),
