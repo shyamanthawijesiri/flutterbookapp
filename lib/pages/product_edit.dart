@@ -78,28 +78,30 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  void _submitForm(Function addProduct, Function updateProduct, [int selectiveProductIndex]) {
+  void _submitForm(Function addProduct, Function updateProduct,Function setSelectedProduct, [int selectiveProductIndex]) {
     _formKey.currentState.validate();
     _formKey.currentState.save();
     print(_formData);
     if (selectiveProductIndex == null) {
-      addProduct(Product(
-          title: _formData['title'],
-          description: _formData['description'],
-          price: _formData['price'],
-          image: _formData['image']));
+      addProduct(
+          _formData['title'],
+          _formData['description'],
+          _formData['image'],
+           _formData['price'],
+          );
     } else {
       updateProduct(
         
-          Product(
-              title: _formData['title'],
-              description: _formData['description'],
-              price: _formData['price'],
-              image: _formData['image']));
+          
+               _formData['title'],
+               _formData['description'],
+              _formData['image'],
+               _formData['price'],
+              );
     }
 
     //widget.addProduct(_formData);
-    Navigator.pushReplacementNamed(context, '/products');
+    Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
   }
 
   Widget _buildSubmitButton() {
@@ -108,7 +110,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
         child: Text('Save'),
         color: Theme.of(context).accentColor,
         textColor: Colors.white,
-        onPressed:() =>  _submitForm(model.addProduct, model.updateProduct, model.selectiveProductIndex));
+        onPressed:() =>  _submitForm(model.addProduct, model.updateProduct,model.selectProduct, model.selectiveProductIndex));
     });
 
     

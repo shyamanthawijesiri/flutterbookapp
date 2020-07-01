@@ -42,7 +42,7 @@ _showWarnDialog(BuildContext context){
       //   return Future.value(false);
       // },
       child: ScopedModelDescendant<MainModel>(builder: (BuildContext context,Widget child, MainModel model  ){
-        final Product product = model.Products[productIndex];
+        final Product product = model.allProducts[productIndex];
         return Scaffold(
         appBar: AppBar(
           title: Text(product.title),

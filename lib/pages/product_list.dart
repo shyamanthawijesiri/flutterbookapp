@@ -38,7 +38,7 @@ Widget _buildIconbtn(BuildContext context , int index, MainModel model){
       return  ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(model.Products[index].title),
+          key: Key(model.allProducts[index].title),
           background: Container(color:Colors.red),
           onDismissed: (DismissDirection direction){
             if(direction == DismissDirection.endToStart){
@@ -49,16 +49,16 @@ Widget _buildIconbtn(BuildContext context , int index, MainModel model){
           child: Column(children: <Widget>[
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage(model.Products[index].image),
+              backgroundImage: AssetImage(model.allProducts[index].image),
             ),
-            title: Text(model.Products[index].title),
-            subtitle: Text('\$${model.Products[index].price.toString()}'),
+            title: Text(model.allProducts[index].title),
+            subtitle: Text('\$${model.allProducts[index].price.toString()}'),
             trailing: _buildIconbtn(context, index, model),
           ),
           Divider(),
         ]),);
       },
-      itemCount: model.Products.length,
+      itemCount: model.allProducts.length,
     );
     });
   }

@@ -38,6 +38,7 @@ class ProductCard extends StatelessWidget{
             ),
               child: Text('Horathepola, welpalla'),
           ),
+          Text(product.userEmail),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -55,7 +56,7 @@ class ProductCard extends StatelessWidget{
               ),
               ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
                 return  IconButton(
-                icon: Icon(model.Products[productIndex].isFavourite ? Icons.favorite : Icons.favorite_border),
+                icon: Icon(model.allProducts[productIndex].isFavourite ? Icons.favorite : Icons.favorite_border),
                 color: Colors.red,
                onPressed: () {
                  model.selectProduct(productIndex);
