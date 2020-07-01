@@ -7,13 +7,27 @@ import '../product_manager.dart';
 import './products_admin.dart';
 import '../widgets/products/product.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
+ final MainModel model;
+ ProductsPage(this.model);
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _ProductsPageState();
+  }
+}
+class _ProductsPageState extends State<ProductsPage>{
 // final List<Product> product;
 // // final Function addProduct;
 // // final Function deleteProduct;
 
 // ProductsPage(this.product);
 //ProductsPage(this.product, this.addProduct, this.deleteProduct);
+@override
+initState(){
+  widget.model.fetchProduct();
+super.initState();
+}
   Widget _buildSlideDrawer(BuildContext context) {
     return Drawer(
         child: Column(

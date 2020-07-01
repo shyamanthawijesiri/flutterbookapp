@@ -27,8 +27,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final MainModel model = MainModel();
     return ScopedModel<MainModel>(
-      model: MainModel(),
+      model: model,
       child:MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light,
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
            // ProductsPage(_product ),
             AuthPage(),
        // '/products': (BuildContext context) => ProductsPage(_product),
-        '/products': (BuildContext context) => ProductsPage(),
+        '/products': (BuildContext context) => ProductsPage(model),
             
             // ProductsPage(_product,_addProduct, _deleteProduct),
        // '/admin': (BuildContext context) => ProductsAdiminPage(_addProduct, _updateProduct, _deleteProduct,_product),

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:first_app/models/product.dart';
 import 'package:first_app/models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:http/http.dart' as http;
 
 class ConnectedProductsModel extends Model {
   List<Product> _products = [];
@@ -9,15 +12,29 @@ class ConnectedProductsModel extends Model {
 
   void addProduct(
       String title, String description, String image, double price) {
-    final Product newProduct = Product(
-        title: title,
-        description: description,
-        price: price,
-        image: image,
-        userEmail: _authenticatedUser.email,
-        userId: _authenticatedUser.id);
-    _products.add(newProduct);
-    notifyListeners();
+    final Map<String, dynamic> productData = {
+      'title': title,
+      'description': description,
+      'image':
+          'https://perfectdailygrind.com/wp-content/uploads/2020/04/Hs_5Ce8ecmXodh-AdEVHyT07irPaZ-zAAhYkKYRJgS5CVzHKs0cAAdyeAF9TIgyh4KI5gqYmyuIDwJnf2f9wCdNvJ5WbQOlSoRr5zmmzMalyR1-RQxvlOtTZkJq9G_GPUiVZ6_WX-1-1.jpeg',
+      'price': price
+    };
+    http
+        .post('https://flutter-product-80e90.firebaseio.com/products.json',
+            body: json.encode(productData))
+        .then((http.Response response) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Product newProduct = Product(
+          id: responseData['name'],
+          title: title,
+          description: description,
+          price: price,
+          image: image,
+          userEmail: _authenticatedUser.email,
+          userId: _authenticatedUser.id);
+      _products.add(newProduct);
+      notifyListeners();
+    });
   }
 }
 
@@ -70,6 +87,12 @@ class ProductsModel extends ConnectedProductsModel {
 
   void selectProduct(int index) {
     this._selProductIndex = index;
+  }
+
+  void fetchProduct() {
+    http
+        .get('https://flutter-product-80e90.firebaseio.com/products.json')
+        .then((http.Response response) {});
   }
 
   void toggleProductFavouriteStatus() {
