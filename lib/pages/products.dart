@@ -46,6 +46,18 @@ super.initState();
       ],
     ));
   }
+  Widget _buildProductsList(){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
+      Widget content = Center(child: Text('No Product'),);
+      if(model.displayProducts.length>0 &&  !model.isLoading){
+        content = Products();
+      }else if(model.isLoading){
+        content = Center(child:CircularProgressIndicator()); 
+
+      }
+      return content;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +78,7 @@ super.initState();
         ],
       ),
       // body: ProductManager(product,addProduct,deleteProduct),
-      body: Products(),
+      body: _buildProductsList(),
     );
   }
 }

@@ -88,7 +88,9 @@ class _ProductEditPageState extends State<ProductEditPage> {
           _formData['description'],
           _formData['image'],
            _formData['price'],
-          );
+          ).then((_)=>{
+            Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null))        
+          });
     } else {
       updateProduct(
         
@@ -101,12 +103,12 @@ class _ProductEditPageState extends State<ProductEditPage> {
     }
 
     //widget.addProduct(_formData);
-    Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
+    
   }
 
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
-      return RaisedButton(
+      return model.isLoading ? Center(child: CircularProgressIndicator()) : RaisedButton(
         child: Text('Save'),
         color: Theme.of(context).accentColor,
         textColor: Colors.white,
