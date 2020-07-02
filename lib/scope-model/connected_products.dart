@@ -17,7 +17,9 @@ class ConnectedProductsModel extends Model {
       'description': description,
       'image':
           'https://perfectdailygrind.com/wp-content/uploads/2020/04/Hs_5Ce8ecmXodh-AdEVHyT07irPaZ-zAAhYkKYRJgS5CVzHKs0cAAdyeAF9TIgyh4KI5gqYmyuIDwJnf2f9wCdNvJ5WbQOlSoRr5zmmzMalyR1-RQxvlOtTZkJq9G_GPUiVZ6_WX-1-1.jpeg',
-      'price': price
+      'price': price,
+      'userEmail':_authenticatedUser.email,
+      'userId': _authenticatedUser.id
     };
     http
         .post('https://flutter-product-80e90.firebaseio.com/products.json',
@@ -92,7 +94,24 @@ class ProductsModel extends ConnectedProductsModel {
   void fetchProduct() {
     http
         .get('https://flutter-product-80e90.firebaseio.com/products.json')
-        .then((http.Response response) {});
+        .then((http.Response response) {
+          final List<Product> fetchedProductList = [];
+          final Map<String, dynamic> productListData = json.decode(response.body);
+          productListData.forEach((String productId,dynamic productData ){
+            final Product product = Product(
+              id: productId,
+              title: productData['title'],
+              description: productData['description'],
+              image: productData['image'],
+              price: productData['price'],
+              userEmail: productData['userEmail'],
+              userId: productData['userId'],
+            );
+            fetchedProductList.add(product);
+          });  
+          _products = fetchedProductList;
+          notifyListeners();
+        });
   }
 
   void toggleProductFavouriteStatus() {

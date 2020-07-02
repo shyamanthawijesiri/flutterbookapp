@@ -49,7 +49,7 @@ Widget _buildIconbtn(BuildContext context , int index, MainModel model){
           child: Column(children: <Widget>[
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage(model.allProducts[index].image),
+              backgroundImage: NetworkImage(model.allProducts[index].image),
             ),
             title: Text(model.allProducts[index].title),
             subtitle: Text('\$${model.allProducts[index].price.toString()}'),
