@@ -50,7 +50,7 @@ _showWarnDialog(BuildContext context){
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(product.image),
+            Image.network(product.image),
             Container(
               padding: EdgeInsets.all(10.0),
               child: Text(product.title),

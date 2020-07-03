@@ -10,6 +10,7 @@ class ConnectedProductsModel extends Model {
   User _authenticatedUser;
   int _selProductIndex;
   bool _isLoading = false;
+  final url = 'https://flutter-product-80e90.firebaseio.com/';
 
   Future<Null> addProduct(
       String title, String description, String image, double price) {
@@ -28,6 +29,7 @@ class ConnectedProductsModel extends Model {
         .post('https://flutter-product-80e90.firebaseio.com/products.json',
             body: json.encode(productData))
         .then((http.Response response) {
+          print(json.decode(response.body));
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Product newProduct = Product(
           id: responseData['name'],
@@ -78,17 +80,33 @@ class ProductsModel extends ConnectedProductsModel {
     notifyListeners();
   }
 
-  void updateProduct(
+  Future<Null> updateProduct(
       String title, String description, String image, double price) {
-    final Product updateProduct = Product(
-        title: title,
-        description: description,
-        price: price,
-        image: image,
-        userEmail: selectiveProduct.userEmail,
-        userId: selectiveProduct.userId);
-    _products[selectiveProductIndex] = updateProduct;
-    notifyListeners();
+        _isLoading = true;
+        notifyListeners();
+        final Map<String, dynamic> updateData = {
+          'title': title,
+          'description': description,
+          'image':
+              'https://perfectdailygrind.com/wp-content/uploads/2020/04/Hs_5Ce8ecmXodh-AdEVHyT07irPaZ-zAAhYkKYRJgS5CVzHKs0cAAdyeAF9TIgyh4KI5gqYmyuIDwJnf2f9wCdNvJ5WbQOlSoRr5zmmzMalyR1-RQxvlOtTZkJq9G_GPUiVZ6_WX-1-1.jpeg',
+          'price': price,
+          'userEmail':_authenticatedUser.email,
+          'userId': _authenticatedUser.id
+        };
+         return http.put(url+'products/${selectiveProduct.id}.json', body: json.encode(updateData)).then((http.Response response){
+          _isLoading =false;
+                final Product updateProduct = Product(
+                id: selectiveProduct.id,
+                title: title,
+                description: description,
+                price: price,
+                image: image,
+                userEmail: selectiveProduct.userEmail,
+                userId: selectiveProduct.userId);
+                _products[selectiveProductIndex] = updateProduct;
+                notifyListeners();
+        });
+
   }
 
   void selectProduct(int index) {

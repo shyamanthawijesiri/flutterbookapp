@@ -4,11 +4,25 @@ import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class ProductListPage extends StatelessWidget {
+class ProductListPage extends StatefulWidget {
+  final MainModel model;
+  ProductListPage(this.model);
   // final List<Product> products;
   // final Function updateProduct;
   // final Function deleteProduct;
   // ProductListPage(this.products, this.updateProduct, this.deleteProduct);
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _ProductListPageState();
+  }
+}
+class _ProductListPageState extends State<ProductListPage>{
+@override
+  initState(){
+    widget.model.fetchProduct();
+    super.initState();
+  }
 
 Widget _buildIconbtn(BuildContext context , int index, MainModel model){
 

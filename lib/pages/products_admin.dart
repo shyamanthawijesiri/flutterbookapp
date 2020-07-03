@@ -1,12 +1,16 @@
 import 'package:first_app/models/product.dart';
 import 'package:first_app/pages/product.dart';
 import 'package:first_app/pages/product_list.dart';
+import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
 
 import 'product_edit.dart';
 import 'products.dart';
 
+
 class ProductsAdiminPage extends StatelessWidget {
+  final MainModel model;
+  ProductsAdiminPage(this.model);
   // final Function addProduct;
   // final Function deleteProduct;
   // final Function updateProduct;
@@ -51,7 +55,7 @@ Widget _buildSlideDrawer(BuildContext context){
           // ProductEditPage(addProduct:addProduct),
           // ProductListPage(products, updateProduct, deleteProduct),
           ProductEditPage(),
-          ProductListPage(),
+          ProductListPage(model),
         ]),
       ),
     );
