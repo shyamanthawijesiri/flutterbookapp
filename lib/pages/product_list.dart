@@ -29,7 +29,7 @@ Widget _buildIconbtn(BuildContext context , int index, MainModel model){
     return IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  model.selectProduct(index);
+                  model.selectProduct(model.allProducts[index].id);
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext context) {
                       // return ProductEditPage(
@@ -56,7 +56,7 @@ Widget _buildIconbtn(BuildContext context , int index, MainModel model){
           background: Container(color:Colors.red),
           onDismissed: (DismissDirection direction){
             if(direction == DismissDirection.endToStart){
-              model.selectProduct(index);
+              model.selectProduct(model.allProducts[index].id);
               model.deleteProduct();
             }
           },

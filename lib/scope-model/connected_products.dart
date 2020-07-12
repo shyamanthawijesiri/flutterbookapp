@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class ConnectedProductsModel extends Model {
   List<Product> _products = [];
   User _authenticatedUser;
-  int _selProductIndex;
+  String _selProductId;
   bool _isLoading = false;
   final url = 'https://flutter-product-80e90.firebaseio.com/';
 
@@ -60,24 +60,39 @@ class ProductsModel extends ConnectedProductsModel {
     return List.from(_products);
   }
 
-  int get selectiveProductIndex {
-    return _selProductIndex;
+  String get selectiveProductId {
+    return _selProductId;
   }
 
   Product get selectiveProduct {
-    if (selectiveProductIndex == null) {
+    if (selectiveProductId == null) {
       return null;
     }
-    return _products[selectiveProductIndex];
+    return _products.firstWhere((Product product){
+      return product.id == _selProductId;
+    });
   }
 
   bool get displayFavouriteOnly {
     return _showFavourite;
   }
+  int get selectedProductIndex {
+    return _products.indexWhere((Product product){
+                  return product.id == _selProductId;
+                });
+  }
 
   void deleteProduct() {
-    _products.removeAt(selectiveProductIndex);
+    _isLoading = true;
+    final deletedIndex = selectiveProduct.id;
+    
+    _products.removeAt(selectedProductIndex);
+    _selProductId = null;
     notifyListeners();
+    http.delete(url+'products/${deletedIndex}.json').then((http.Response response){
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
   Future<Null> updateProduct(
@@ -103,20 +118,21 @@ class ProductsModel extends ConnectedProductsModel {
                 image: image,
                 userEmail: selectiveProduct.userEmail,
                 userId: selectiveProduct.userId);
-                _products[selectiveProductIndex] = updateProduct;
+                _products[selectedProductIndex] = updateProduct;
                 notifyListeners();
         });
 
   }
+  
 
-  void selectProduct(int index) {
-    this._selProductIndex = index;
+  void selectProduct(String productId) {
+    _selProductId = productId;
   }
 
-  void fetchProduct() {
+  Future<Null> fetchProduct() {
     _isLoading = true;
     notifyListeners();
-    http
+    return http
         .get('https://flutter-product-80e90.firebaseio.com/products.json')
         .then((http.Response response) {
           final List<Product> fetchedProductList = [];
@@ -141,6 +157,7 @@ class ProductsModel extends ConnectedProductsModel {
           _products = fetchedProductList;
           _isLoading = false;
           notifyListeners();
+          _selProductId = null;
         });
   }
 
@@ -155,7 +172,7 @@ class ProductsModel extends ConnectedProductsModel {
         userEmail: selectiveProduct.userEmail,
         userId: selectiveProduct.userId,
         isFavourite: newFavouriteStatus);
-    _products[selectiveProductIndex] = updateProduct;
+    _products[selectedProductIndex] = updateProduct;
     notifyListeners();
   }
 

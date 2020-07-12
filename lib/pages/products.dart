@@ -55,7 +55,7 @@ super.initState();
         content = Center(child:CircularProgressIndicator()); 
 
       }
-      return content;
+      return RefreshIndicator(child:content ,onRefresh: model.fetchProduct) ;
     });
   }
 

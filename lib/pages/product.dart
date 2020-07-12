@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProductPage extends StatelessWidget {
+  final Product product;
+  ProductPage(this.product);
 
 _showWarnDialog(BuildContext context){
    showDialog(
@@ -30,8 +32,8 @@ _showWarnDialog(BuildContext context){
 
   //final String title, imageurl;
  // ProductPage(this.title, this.imageurl) {}
- final int productIndex;
- ProductPage(this.productIndex);
+//  final String productId;
+//  ProductPage(this.productId);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,16 +43,19 @@ _showWarnDialog(BuildContext context){
       //   Navigator.pop(context, false);
       //   return Future.value(false);
       // },
-      child: ScopedModelDescendant<MainModel>(builder: (BuildContext context,Widget child, MainModel model  ){
-        final Product product = model.allProducts[productIndex];
-        return Scaffold(
+      child:Scaffold(
         appBar: AppBar(
           title: Text(product.title),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.network(product.image),
+             FadeInImage(
+            image: NetworkImage(product.image),
+            height: 300.0,
+            fit: BoxFit.cover,
+            placeholder: AssetImage('assets/leaves.jpg'),
+          ),
             Container(
               padding: EdgeInsets.all(10.0),
               child: Text(product.title),
@@ -67,8 +72,8 @@ _showWarnDialog(BuildContext context){
             ),
           ],
         ),
-      );
-      }) 
+      ),
+       
     );
   }
 }
