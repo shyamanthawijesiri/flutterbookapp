@@ -25,10 +25,11 @@ class ConnectedProductsModel extends Model {
       'userEmail': _authenticatedUser.email,
       'userId': _authenticatedUser.id
     };
-    final http.Response response = await http.post('https://flutter-product-80e90.firebaseio.com/products.json',
-            body: json.encode(productData));
-      try{
-        if (response.statusCode != 200 && response.statusCode != 201) {
+    final http.Response response = await http.post(
+        'https://flutter-product-80e90.firebaseio.com/products.json',
+        body: json.encode(productData));
+    try {
+      if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
         notifyListeners();
         return false;
@@ -47,14 +48,11 @@ class ConnectedProductsModel extends Model {
       _isLoading = false;
       notifyListeners();
       return true;
-      }catch(error){
-
+    } catch (error) {
       _isLoading = false;
       notifyListeners();
       return false;
-      }
-    
-    
+    }
   }
 }
 
@@ -216,6 +214,21 @@ class UserModel extends ConnectedProductsModel {
   void login(String email, String password) {
     _authenticatedUser = User(id: '1', email: email, password: password);
   }
+
+  Future<Map<String, dynamic>> signUp(String email, String password) async {
+    final Map<String, dynamic> authData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+    final http.Response response = await http.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
+        body: json.encode(authData),
+        headers: {'Content-Type':'application/json'});
+        print(json.decode(response.body));
+        return {'success':true, 'msg':'successfull'};
+  }
+
 }
 
 class UtilityModel extends ConnectedProductsModel {
