@@ -225,8 +225,17 @@ class UserModel extends ConnectedProductsModel {
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
         body: json.encode(authData),
         headers: {'Content-Type':'application/json'});
-        print(json.decode(response.body));
-        return {'success':true, 'msg':'successfull'};
+        bool hasError = true;
+        String message = 'somethings went wrong';
+        final Map<String,dynamic> responseData = json.decode(response.body);
+        if(responseData.containsKey('idToken')){
+          hasError = false;
+          message = 'Authentication successfully';
+
+        }else if(responseData['error']['message'] == 'EMAIL_EXISTS'){
+          message = 'This email already exists';
+        }
+        return {'success':!hasError, 'message':message};
   }
 
 }
