@@ -211,11 +211,41 @@ class ProductsModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
-  void login(String email, String password) {
-    _authenticatedUser = User(id: '1', email: email, password: password);
+  Future<Map<String, dynamic>> login(String email, String password) async {
+        _isLoading = true;
+        notifyListeners();
+       final Map<String, dynamic> authData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+
+      final http.Response response = await http.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
+        body: json.encode(authData),
+        headers: {'Content-Type':'application/json'});
+
+        bool hasError = true;
+        String message = 'somethings went wrong';
+        final Map<String,dynamic> responseData = json.decode(response.body);
+        if(responseData.containsKey('idToken')){
+          hasError = false;
+          message = 'Authentication successfully';
+
+        }else if(responseData['error']['message'] == 'EMAIL_NOT_FOUND'){
+          message = 'This email not found';
+        }else if(responseData['error']['message'] == 'INVALID_PASSWORD'){
+          message = 'Invalid password';
+        }
+        _isLoading = false;
+        notifyListeners();
+        return {'success':!hasError, 'message':message};
+   
   }
 
   Future<Map<String, dynamic>> signUp(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
@@ -235,6 +265,8 @@ class UserModel extends ConnectedProductsModel {
         }else if(responseData['error']['message'] == 'EMAIL_EXISTS'){
           message = 'This email already exists';
         }
+        _isLoading = false;
+        notifyListeners();
         return {'success':!hasError, 'message':message};
   }
 

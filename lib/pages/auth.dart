@@ -107,11 +107,14 @@ class _AuthPageState extends State<AuthPage> {
       return;
     }
     _formKey.currentState.save();
+   Map<String, dynamic> successInformation;
     if (_authMode == AuthMode.Login) {
-      login(_formData['email'], _formData['password']);
+      successInformation =
+        await login(_formData['email'], _formData['password']);
     } else {
-      final Map<String, dynamic> successInformation =
+      successInformation =
           await signUp(_formData['email'], _formData['password']);
+    }
       if (successInformation['success']) {
         Navigator.pushReplacementNamed(context, '/products');
       } else {
@@ -131,7 +134,7 @@ class _AuthPageState extends State<AuthPage> {
               );
             });
       }
-    }
+    
   }
 
   @override
@@ -175,10 +178,14 @@ class _AuthPageState extends State<AuthPage> {
                     SizedBox(height: 10.0),
                     ScopedModelDescendant<MainModel>(builder:
                         (BuildContext context, Widget child, MainModel model) {
-                      return RaisedButton(
-                          child: Text('Login'),
-                          onPressed: () =>
-                              _submitForm(model.login, model.signUp));
+                      return model.isLoading
+                          ? CircularProgressIndicator()
+                          : RaisedButton(
+                              child: Text(_authMode == AuthMode.Login
+                                  ? 'Login'
+                                  : 'Signup'),
+                              onPressed: () =>
+                                  _submitForm(model.login, model.signUp));
                     })
                   ],
                 ),
