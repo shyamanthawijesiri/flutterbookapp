@@ -4,6 +4,8 @@ import 'package:first_app/models/product.dart';
 import 'package:first_app/models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
+import '../models/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectedProductsModel extends Model {
   List<Product> _products = [];
@@ -26,7 +28,7 @@ class ConnectedProductsModel extends Model {
       'userId': _authenticatedUser.id
     };
     final http.Response response = await http.post(
-        'https://flutter-product-80e90.firebaseio.com/products.json',
+        'https://flutter-product-80e90.firebaseio.com/products.json?auth=${_authenticatedUser.idToken}',
         body: json.encode(productData));
     try {
       if (response.statusCode != 200 && response.statusCode != 201) {
@@ -101,7 +103,7 @@ class ProductsModel extends ConnectedProductsModel {
     _selProductId = null;
     notifyListeners();
     return http
-        .delete(url + 'products/${deletedIndex}.json')
+        .delete(url + 'products/${deletedIndex}.json?auth=${_authenticatedUser.idToken}')
         .then((http.Response response) {
       _isLoading = false;
       notifyListeners();
@@ -127,7 +129,7 @@ class ProductsModel extends ConnectedProductsModel {
       'userId': _authenticatedUser.id
     };
     return http
-        .put(url + 'products/${selectiveProduct.id}.json',
+        .put(url + 'products/${selectiveProduct.id}.json?auth=${_authenticatedUser.idToken}',
             body: json.encode(updateData))
         .then((http.Response response) {
       _isLoading = false;
@@ -157,7 +159,7 @@ class ProductsModel extends ConnectedProductsModel {
     _isLoading = true;
     notifyListeners();
     return http
-        .get('https://flutter-product-80e90.firebaseio.com/products.json')
+        .get('https://flutter-product-80e90.firebaseio.com/products.json?auth=${_authenticatedUser.idToken}')
         .then<Null>((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
@@ -211,19 +213,34 @@ class ProductsModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
-  Future<Map<String, dynamic>> login(String email, String password) async {
+
+User get user  {
+return _authenticatedUser;
+}
+
+  Future<Map<String, dynamic>> authenticate(String email, String password, [AuthMode mode = AuthMode.Login]) async {
         _isLoading = true;
         notifyListeners();
+
        final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
       'returnSecureToken': true
     };
+      http.Response response;
+      if (mode == AuthMode.Login){
 
-      final http.Response response = await http.post(
+      response = await http.post(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
         body: json.encode(authData),
         headers: {'Content-Type':'application/json'});
+      }else{
+        response = await http.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
+        body: json.encode(authData),
+        headers: {'Content-Type':'application/json'});
+
+      }
 
         bool hasError = true;
         String message = 'somethings went wrong';
@@ -231,44 +248,64 @@ class UserModel extends ConnectedProductsModel {
         if(responseData.containsKey('idToken')){
           hasError = false;
           message = 'Authentication successfully';
+          _authenticatedUser = User(id: responseData['localId'],email: email, idToken: responseData['idToken']);
+          final SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString('token', responseData['idToken']);
+          pref.setString('email', email);
+          pref.setString('userId', responseData['localId']);
 
         }else if(responseData['error']['message'] == 'EMAIL_NOT_FOUND'){
           message = 'This email not found';
         }else if(responseData['error']['message'] == 'INVALID_PASSWORD'){
           message = 'Invalid password';
-        }
-        _isLoading = false;
-        notifyListeners();
-        return {'success':!hasError, 'message':message};
-   
-  }
-
-  Future<Map<String, dynamic>> signUp(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
-    final Map<String, dynamic> authData = {
-      'email': email,
-      'password': password,
-      'returnSecureToken': true
-    };
-    final http.Response response = await http.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
-        body: json.encode(authData),
-        headers: {'Content-Type':'application/json'});
-        bool hasError = true;
-        String message = 'somethings went wrong';
-        final Map<String,dynamic> responseData = json.decode(response.body);
-        if(responseData.containsKey('idToken')){
-          hasError = false;
-          message = 'Authentication successfully';
-
         }else if(responseData['error']['message'] == 'EMAIL_EXISTS'){
           message = 'This email already exists';
         }
         _isLoading = false;
         notifyListeners();
         return {'success':!hasError, 'message':message};
+   
   }
+  
+  void autoAuthenticate() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final String token = pref.getString('token');
+    if(token != null){
+    final String email = pref.getString('email');
+    final String userId = pref.getString('userId');
+    _authenticatedUser = User(id: userId, email: email, idToken: token);
+    notifyListeners();
+      
+
+    }
+  }
+
+  // Future<Map<String, dynamic>> signUp(String email, String password) async {
+  //   _isLoading = true;
+  //   notifyListeners();
+  //   final Map<String, dynamic> authData = {
+  //     'email': email,
+  //     'password': password,
+  //     'returnSecureToken': true
+  //   };
+  //   final http.Response response = await http.post(
+  //       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
+  //       body: json.encode(authData),
+  //       headers: {'Content-Type':'application/json'});
+  //       bool hasError = true;
+  //       String message = 'somethings went wrong';
+  //       final Map<String,dynamic> responseData = json.decode(response.body);
+  //       if(responseData.containsKey('idToken')){
+  //         hasError = false;
+  //         message = 'Authentication successfully';
+
+  //       }else if(responseData['error']['message'] == 'EMAIL_EXISTS'){
+  //         message = 'This email already exists';
+  //       }
+  //       _isLoading = false;
+  //       notifyListeners();
+  //       return {'success':!hasError, 'message':message};
+  // }
 
 }
 
