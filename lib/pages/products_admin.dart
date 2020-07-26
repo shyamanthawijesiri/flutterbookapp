@@ -2,6 +2,7 @@ import 'package:first_app/models/product.dart';
 import 'package:first_app/pages/product.dart';
 import 'package:first_app/pages/product_list.dart';
 import 'package:first_app/scope-model/main.dart';
+import 'package:first_app/ui-elements/logout_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'product_edit.dart';
@@ -32,7 +33,9 @@ Widget _buildSlideDrawer(BuildContext context){
                 onTap: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },
-              )
+              ),
+              Divider(),
+             LogoutListTile()
             ],
           ),
         );

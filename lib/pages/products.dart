@@ -1,5 +1,6 @@
 import 'package:first_app/models/product.dart';
 import 'package:first_app/scope-model/main.dart';
+import 'package:first_app/ui-elements/logout_list_tile.dart';
 //import 'package:first_app/scope-model/main.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -42,7 +43,9 @@ super.initState();
           onTap: () {
             Navigator.pushReplacementNamed(context, '/admin');
           },
-        )
+        ),
+        Divider(),
+        LogoutListTile()
       ],
     ));
   }

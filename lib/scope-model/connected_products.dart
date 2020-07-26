@@ -280,32 +280,16 @@ return _authenticatedUser;
     }
   }
 
-  // Future<Map<String, dynamic>> signUp(String email, String password) async {
-  //   _isLoading = true;
-  //   notifyListeners();
-  //   final Map<String, dynamic> authData = {
-  //     'email': email,
-  //     'password': password,
-  //     'returnSecureToken': true
-  //   };
-  //   final http.Response response = await http.post(
-  //       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDTKc_xYuFNMELfnBOfZgTzdfRCxeFGWHE',
-  //       body: json.encode(authData),
-  //       headers: {'Content-Type':'application/json'});
-  //       bool hasError = true;
-  //       String message = 'somethings went wrong';
-  //       final Map<String,dynamic> responseData = json.decode(response.body);
-  //       if(responseData.containsKey('idToken')){
-  //         hasError = false;
-  //         message = 'Authentication successfully';
+    void logout() async{
+      _authenticatedUser = null;
+       final SharedPreferences pref = await SharedPreferences.getInstance();
+       pref.remove('token');
+       pref.remove('email');
+       pref.remove('userId');
 
-  //       }else if(responseData['error']['message'] == 'EMAIL_EXISTS'){
-  //         message = 'This email already exists';
-  //       }
-  //       _isLoading = false;
-  //       notifyListeners();
-  //       return {'success':!hasError, 'message':message};
-  // }
+    }
+
+  
 
 }
 
