@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:first_app/models/product.dart';
 import 'package:first_app/models/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 import '../models/auth.dart';
@@ -213,7 +216,12 @@ class ProductsModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
+Timer _authTimer;
+PublishSubject<bool> _userSubject = PublishSubject();
 
+PublishSubject<bool> get userSubject {
+  return _userSubject;
+}
 User get user  {
 return _authenticatedUser;
 }
@@ -249,10 +257,15 @@ return _authenticatedUser;
           hasError = false;
           message = 'Authentication successfully';
           _authenticatedUser = User(id: responseData['localId'],email: email, idToken: responseData['idToken']);
+          setAuthTime(int.parse(responseData['expiresIn']));
+          _userSubject.add(true);
+          final DateTime now = DateTime.now();
+          final DateTime expiryTime = now.add(Duration(seconds:int.parse(responseData['expiresIn'])));
           final SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('token', responseData['idToken']);
           pref.setString('email', email);
           pref.setString('userId', responseData['localId']);
+          pref.setString('expiryTime', expiryTime.toIso8601String());
 
         }else if(responseData['error']['message'] == 'EMAIL_NOT_FOUND'){
           message = 'This email not found';
@@ -270,10 +283,21 @@ return _authenticatedUser;
   void autoAuthenticate() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
     final String token = pref.getString('token');
+    final String expiryTime = pref.getString('expiryTime');
     if(token != null){
+      final DateTime now = DateTime.now();
+      final DateTime parsedExpiryTime = DateTime.parse(expiryTime);
+      if(parsedExpiryTime.isBefore(now)){
+        _authenticatedUser = null;
+        notifyListeners();
+        return;
+      }
     final String email = pref.getString('email');
     final String userId = pref.getString('userId');
+    final int tokenLifeSpan = parsedExpiryTime.difference(now).inSeconds;
     _authenticatedUser = User(id: userId, email: email, idToken: token);
+    _userSubject.add(true);
+    setAuthTime(tokenLifeSpan);
     notifyListeners();
       
 
@@ -281,12 +305,21 @@ return _authenticatedUser;
   }
 
     void logout() async{
+      print('Logout');
       _authenticatedUser = null;
+      _authTimer.cancel();
        final SharedPreferences pref = await SharedPreferences.getInstance();
        pref.remove('token');
        pref.remove('email');
        pref.remove('userId');
+        
+    }
 
+    void setAuthTime (int time){
+     _authTimer = Timer(Duration(milliseconds: time * 5), (){
+       logout();
+       _userSubject.add(false);
+     });
     }
 
   

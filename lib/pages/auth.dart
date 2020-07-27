@@ -39,7 +39,7 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildEmailTextField() {
     return TextFormField(
-      obscureText: true,
+     // obscureText: true,
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,
@@ -113,7 +113,7 @@ class _AuthPageState extends State<AuthPage> {
           await authenticate(_formData['email'], _formData['password'], _authMode);
     
       if (successInformation['success']) {
-        Navigator.pushReplacementNamed(context, '/products');
+      //  Navigator.pushReplacementNamed(context, '/');
       } else {
         showDialog(
             context: context,
