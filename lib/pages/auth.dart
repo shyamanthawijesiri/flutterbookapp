@@ -39,7 +39,7 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildEmailTextField() {
     return TextFormField(
-     // obscureText: true,
+    //  obscureText: true,
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,

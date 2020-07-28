@@ -26,7 +26,7 @@ class _ProductsPageState extends State<ProductsPage>{
 //ProductsPage(this.product, this.addProduct, this.deleteProduct);
 @override
 initState(){
-  widget.model.fetchProduct();
+  widget.model.fetchProduct(onlyForUser: true);
 super.initState();
 }
   Widget _buildSlideDrawer(BuildContext context) {

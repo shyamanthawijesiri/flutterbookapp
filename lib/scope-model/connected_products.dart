@@ -158,7 +158,7 @@ class ProductsModel extends ConnectedProductsModel {
     _selProductId = productId;
   }
 
-  Future<Null> fetchProduct() {
+  Future<Null> fetchProduct({onlyForUser = false}) {
     _isLoading = true;
     notifyListeners();
     return http
@@ -180,10 +180,13 @@ class ProductsModel extends ConnectedProductsModel {
           price: productData['price'],
           userEmail: productData['userEmail'],
           userId: productData['userId'],
+          isFavourite:productData['wishlistusers'] == null? false :  (productData['wishlistusers'] as Map<String,dynamic>).containsKey(_authenticatedUser.id)
         );
         fetchedProductList.add(product);
       });
-      _products = fetchedProductList;
+      _products = onlyForUser ? fetchedProductList.where((Product product){
+        return product.userId == _authenticatedUser.id;
+      }).toList() : fetchedProductList;
       _isLoading = false;
       notifyListeners();
       _selProductId = null;
@@ -194,10 +197,11 @@ class ProductsModel extends ConnectedProductsModel {
     });
   }
 
-  void toggleProductFavouriteStatus() {
+  void toggleProductFavouriteStatus()  async{
     final bool isCurrentFavourite = selectiveProduct.isFavourite;
     final bool newFavouriteStatus = !isCurrentFavourite;
     final Product updateProduct = Product(
+        id: selectiveProduct.id,
         title: selectiveProduct.title,
         description: selectiveProduct.description,
         price: selectiveProduct.price,
@@ -207,6 +211,26 @@ class ProductsModel extends ConnectedProductsModel {
         isFavourite: newFavouriteStatus);
     _products[selectedProductIndex] = updateProduct;
     notifyListeners();
+
+    http.Response response;
+    if(newFavouriteStatus){
+      response = await http.put(url+'products/${selectiveProduct.id}/wishlistusers/${_authenticatedUser.id}.json?auth=${_authenticatedUser.idToken}',body: json.encode(true));
+    }else{
+      response = await http.delete(url+'products/${selectiveProduct.id}/wishlistusers/${_authenticatedUser.id}.json?auth=${_authenticatedUser.idToken}');
+    }
+    if(response.statusCode !=200 && response.statusCode != 201){
+       final Product updateProduct = Product(
+         id: selectiveProduct.id,
+        title: selectiveProduct.title,
+        description: selectiveProduct.description,
+        price: selectiveProduct.price,
+        image: selectiveProduct.image,
+        userEmail: selectiveProduct.userEmail,
+        userId: selectiveProduct.userId,
+        isFavourite: !newFavouriteStatus);
+    _products[selectedProductIndex] = updateProduct;
+    notifyListeners();
+    }
   }
 
   void toggleDisplayMode() {
@@ -308,6 +332,7 @@ return _authenticatedUser;
       print('Logout');
       _authenticatedUser = null;
       _authTimer.cancel();
+      _userSubject.add(false);
        final SharedPreferences pref = await SharedPreferences.getInstance();
        pref.remove('token');
        pref.remove('email');
@@ -316,10 +341,7 @@ return _authenticatedUser;
     }
 
     void setAuthTime (int time){
-     _authTimer = Timer(Duration(milliseconds: time * 5), (){
-       logout();
-       _userSubject.add(false);
-     });
+     _authTimer = Timer(Duration(seconds: time ), logout);
     }
 
   
