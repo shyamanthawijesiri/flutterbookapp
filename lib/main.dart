@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+
 import './models/product.dart';
 import './pages/auth.dart';
 import 'pages/product.dart';
@@ -11,6 +12,7 @@ import 'pages/products_admin.dart';
 
 void main() {
 //debugPaintSizeEnabled = true;
+//MapView.setApiKey("<your_api_key>");
   runApp(MyApp());
 }
 
