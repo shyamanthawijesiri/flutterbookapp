@@ -5,17 +5,19 @@ const path = require('path');
 const fs = require('fs');
 const Busboy = require('busboy');
 const admin = require('firebase-admin');
-const uuid = require('uuid/v4');
-
-const gcconfig = {
-    projectId: 'flutter-product-80e90',
-    keyFilename: 'flutter-product.json'
-}
-const gcs = require('@google-cloud/storage')(gcconfig);
+const { v4: uuid } = require('uuid');
+const {Storage} = require('@google-cloud/storage');
+const gcs = new Storage({keyFilename: "flutter-product.json"});
+// const gcconfig = {
+//     projectId: 'flutter-product-80e90',
+//     keyFilename: 'flutter-product.json'
+// }
+//const gcs = require('@google-cloud/storage')(gcconfig);
 var serviceAccount = require("./flutter-product.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+
 });
 
 exports.storeImage = functions.https.onRequest((req, res) => {

@@ -6,6 +6,8 @@
 //       });
 //     },),);
 
+import 'dart:io';
+
 import 'package:first_app/models/product.dart';
 import 'package:first_app/scope-model/main.dart';
 import 'package:first_app/widgets/form_inputs/image.dart';
@@ -36,7 +38,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     'title': null,
     'description': null,
     'price': null,
-    'image': 'assets/leaves.jpg'
+    'image': null
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -78,6 +80,9 @@ class _ProductEditPageState extends State<ProductEditPage> {
         _formData['price'] = double.parse(value);
       },
     );
+  }
+  void _setImage(File image){
+    _formData['image'] = image;
   }
 
   void _submitForm(Function addProduct, Function updateProduct,Function setSelectedProduct, [int selectiveProductIndex]) {
@@ -154,7 +159,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
                 SizedBox(
                   height: 10.0,
                 ),
-                ImageInput(),
+                ImageInput(_setImage,product),
               
                 _buildSubmitButton()
               ]),
