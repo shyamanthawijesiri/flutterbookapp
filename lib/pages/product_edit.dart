@@ -44,7 +44,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   Widget _buildTitleTextField(Product product) {
     return TextFormField(
-      validator: (String value) {
+      validator: (String value){
         if (value.isEmpty) {
           return 'title required';
         }
@@ -86,27 +86,28 @@ class _ProductEditPageState extends State<ProductEditPage> {
   }
 
   void _submitForm(Function addProduct, Function updateProduct,Function setSelectedProduct, [int selectiveProductIndex]) {
-    _formKey.currentState.validate();
-    _formKey.currentState.save();
-    print(_formData);
+     _formKey.currentState.validate();
+     _formKey.currentState.save();
+   
     if (selectiveProductIndex == -1) {
-      addProduct(
-          _formData['title'],
-          _formData['description'],
-          _formData['image'],
-           _formData['price'],
-          ).then((bool success){
-            if(success){
+       print(_formData);
+      // addProduct(
+      //     _formData['title'],
+      //     _formData['description'],
+      //     _formData['image'],
+      //      _formData['price'],
+      //     ).then((bool success){
+      //       if(success){
 
-            Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));       
-            }else{
-              showDialog(context: context, builder: (BuildContext context){
-                return AlertDialog(title: Text('something went wrong'),content:Text('Plese try again'),actions: <Widget>[
-                  FlatButton(onPressed: ()=> Navigator.of(context).pop(), child:Text('Okay'))
-                ],);
-               });
-            }
-          });
+      //       Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));       
+      //       }else{
+      //         showDialog(context: context, builder: (BuildContext context){
+      //           return AlertDialog(title: Text('something went wrong'),content:Text('Plese try again'),actions: <Widget>[
+      //             FlatButton(onPressed: ()=> Navigator.of(context).pop(), child:Text('Okay'))
+      //           ],);
+      //          });
+      //       }
+      //     });
     } else {
       updateProduct(
         

@@ -24,13 +24,14 @@ class _ImageInputState extends State<ImageInput> {
   File _image;
   final picker = ImagePicker();
 
-  Future getImage(BuildContext context, ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+  Future _getImage(BuildContext context, ImageSource source) async {
+    final PickedFile pickedFile = await picker.getImage(source: source);
 
     setState(() {
       _image = File(pickedFile.path);
+      print(_image);
     });
-    widget.setImage(File(pickedFile.path) );
+    widget.setImage(_image);
     Navigator.pop(context);
   }
 
@@ -50,7 +51,7 @@ class _ImageInputState extends State<ImageInput> {
                 SizedBox(height: 10.0),
                 FlatButton(
                   onPressed: () {
-                    getImage(context, ImageSource.camera);
+                    _getImage(context, ImageSource.camera);
                   },
                   child: Text('Use Camera'),
                   textColor: Theme.of(context).primaryColor,
@@ -58,7 +59,7 @@ class _ImageInputState extends State<ImageInput> {
                 SizedBox(height: 5.0),
                 FlatButton(
                     onPressed: () {
-                      getImage(context, ImageSource.gallery);
+                      _getImage(context, ImageSource.gallery);
                     },
                     child: Text('User Gallery'),
                     textColor: Theme.of(context).primaryColor),

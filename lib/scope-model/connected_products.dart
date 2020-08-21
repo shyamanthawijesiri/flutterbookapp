@@ -20,18 +20,34 @@ class ConnectedProductsModel extends Model {
   bool _isLoading = false;
   final url = 'https://flutter-product-80e90.firebaseio.com/';
 
-  Future<Map<String, String>> uploadImage(File image,
+  Future<Map<String, dynamic>> uploadImage(File image,
       {String imagePath}) async {
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest(
         'POST',
         Uri.parse(
-            ' https://us-central1-flutter-product-80e90.cloudfunctions.net/storeImage'));
+            'https://us-central1-flutter-product-80e90.cloudfunctions.net/storeImage'));
     final file = await http.MultipartFile.fromPath('image', image.path,
-        contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+        contentType:MediaType(mimeTypeData[0], mimeTypeData[1]));
         imageUploadRequest.files.add(file);
-      if(imagePath != null){
+      if(imagePath != null){  
           imageUploadRequest.fields['imagePath'] = Uri.encodeComponent(imagePath);
+      }
+      imageUploadRequest.headers['Authorization']='Bearer ${_authenticatedUser.idToken}';
+      try{
+        final streamedResponse = await imageUploadRequest.send();
+        final response = await http.Response.fromStream(streamedResponse);
+        if(response.statusCode !=200 && response.statusCode !=201 ){
+          print('something went wrong');
+          print(response.statusCode);
+          print(json.decode(response.body));
+          return null;  
+        }
+        final responseData = json.decode(response.body);
+        return responseData;
+      }catch(error){
+        print(error);
+        return null;
       }
   }
 
@@ -39,6 +55,12 @@ class ConnectedProductsModel extends Model {
       String title, String description, File image, double price) async {
     _isLoading = true;
     notifyListeners();
+    final uploadData = await uploadImage(image);
+    if(uploadData == null){
+      print('upload failed');
+      return false;
+    }
+    
     final Map<String, dynamic> productData = {
       'title': title,
       'description': description,
@@ -46,7 +68,9 @@ class ConnectedProductsModel extends Model {
           'https://perfectdailygrind.com/wp-content/uploads/2020/04/Hs_5Ce8ecmXodh-AdEVHyT07irPaZ-zAAhYkKYRJgS5CVzHKs0cAAdyeAF9TIgyh4KI5gqYmyuIDwJnf2f9wCdNvJ5WbQOlSoRr5zmmzMalyR1-RQxvlOtTZkJq9G_GPUiVZ6_WX-1-1.jpeg',
       'price': price,
       'userEmail': _authenticatedUser.email,
-      'userId': _authenticatedUser.id
+      'userId': _authenticatedUser.id,
+      'imagePath':uploadData['imagePath'],
+      'imageUrl':uploadData['imageUrl']
     };
     final http.Response response = await http.post(
         'https://flutter-product-80e90.firebaseio.com/products.json?auth=${_authenticatedUser.idToken}',
@@ -64,7 +88,7 @@ class ConnectedProductsModel extends Model {
           title: title,
           description: description,
           price: price,
-          image: image,
+          image: uploadData['imageUrl'],
           userEmail: _authenticatedUser.email,
           userId: _authenticatedUser.id);
       _products.add(newProduct);
